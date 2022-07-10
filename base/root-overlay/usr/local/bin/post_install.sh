@@ -51,7 +51,7 @@ clear
 echo "Set up your hostname!"
 echo "Enter your computer name: "
 read -r hostname
-echo $hostname > /etc/hostname
+echo "$hostname" > /etc/hostname
 echo "Checking hostname (/etc/hostname)"
 cat /etc/hostname
 sleep 1s
@@ -165,4 +165,11 @@ elif grep -E "Integrated Graphics Controller" <<< ${gpu_type}; then
 elif grep -E "Intel Corporation UHD" <<< ${gpu_type}; then
     pacman -S --needed --noconfirm libva-intel-driver libvdpau-va-gl vulkan-intel libva-intel-driver libva-utils
 fi
-sleep 2
+sleep 2s
+clear
+echo "Second Phase Completed!"
+echo "Entering into Final Phase of Installation..."
+echo "run the following commands to start final phase "
+echo "1. exit"
+echo "2. final.sh"
+sleep 5s

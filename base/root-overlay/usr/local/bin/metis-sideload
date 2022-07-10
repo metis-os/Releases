@@ -147,54 +147,38 @@ clear
 lsblk
 sleep 3s
 clear
-echo "Installing Base system with zen kernel!!!"
+echo "Installing Base system"
 sleep 2s
-basestrap /mnt base base-devel runit elogind-runit linux-zen
+basestrap /mnt base base-devel runit elogind-runit
+sleep 2s
+echo "Installing Kernel"
+ basestrap /mnt linux-zen linux-firmware linux-zen-headers
 clear
 echo "generating fstab file"
-fstabgen -U /mnt >> /mnt/etc/fstab
+fstabgen -U /mnt > /mnt/etc/fstab
 sleep 1s
 clear
 echo "Checking Fstab Contents"
 cat /mnt/etc/fstab
 sleep 2s
-echo "Copying config files"
-mv /usr/local/bin/os-release /mnt/
-mv /usr/local/bin/grub /mnt/
-mv /usr/local/bin/xinitrc /mnt/
-cp -r /usr/local/bin/pacman.conf /mnt/
-cp -r /usr/local/bin/mirrorlist /mnt/
-# cp -r /usr/local/bin/arch-mirrorlist /mnt/
-cp -r /usr/local/bin/metis-mirrorlist /mnt/
-cp -r /usr/local/bin/init.vim /mnt/
-cp -r /usr/local/bin/zshrc /mnt/
-cp -r /usr/local/bin/picom.conf /mnt/
-sleep 2s
-echo "Working now in live environment!"
-cp/usr/local/bin/post_install.sh
-artix-chroot /mnt ./post_install.sh
-
-# After Installation
-rm -rf /mnt/post_install.sh
+echo "Copying config files to new system"
+cp /usr/bin/artix-chroot /usr/bin/metis-chroot
+cp /usr/local/bin/post_install.sh /mnt
+cp /usr/local/bin/os-release /mnt
+cp /usr/local/bin/grub /mnt
+cp /usr/local/bin/xinitrc /mnt
+cp /usr/local/bin/pacman.conf /mnt
+cp /usr/local/bin/mirrorlist /mnt
+cp /usr/local/bin/metis-mirrorlist /mnt
+cp /usr/local/bin/init.vim /mnt
+cp /usr/local/bin/zshrc /mnt
+cp /usr/local/bin/picom.conf /mnt
+echo "Checking configs in system"
+ls /mnt
+sleep 5s
 clear
-echo -ne "
-__________________________________________________________________________________________________________
-|                                   Thanks For Choosing Metis Linux!                                      |
-|                                                                                                         |
-|                       +-+-+-+-+-+        +-+-+-+-+-+        +-+-+-+-+-+-+-+-+-+                         |
-|                       |M|a|g|i|c|        |M|e|t|i|s|        |I|n|s|t|a|l|l|e|r|                         |
-|                       +-+-+-+-+-+        +-+-+-+-+-+        +-+-+-+-+-+-+-+-+-+                         |
-|                                                                                                         |
-|---------------------------------------------------------------------------------------------------------|
-|                                           INSTALLATION SUCCESSFUL!                                      |
-|---------------------------------------------------------------------------------------------------------|
-|                                 Metis Linus Installation Completed.                                     |
-|               Check: https://github.com/metis-os for details or visit https://metislinux.org            |
-|---------------------------------------------------------------------------------------------------------|
-|_________________________________________________________________________________________________________|
-
-"
-echo "Metis Linux Installation Finished!!!"
-echo "Umount all the drives using command: umount -R /mnt"
-echo "And then reboot using command: reboot"
-echo "After Reboot login your your username and password and type startx to start GUI."
+echo "First Phase Completed!"
+echo "Entering into Second Phase of Installation..."
+echo "run the following command to start second phase"
+echo "1. metis-chroot /mnt"
+echo "2. ./post_install.sh"

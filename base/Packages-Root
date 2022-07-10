@@ -3,4 +3,5 @@
 mkinitcpio-nfs-utils
 squashfs-tools
 grub
+vim
 artix-live-@initsys@
