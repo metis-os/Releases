@@ -1,0 +1,6 @@
+slstatus &
+picom &
+xwallpaper --zoom /usr/share/backgrounds/metis/b-01-dark.png &
+while true; do
+    dwm >/dev/null 2>&1
+done

@@ -1,0 +1,9 @@
+lang=sr
+bootlang="lang=sr_RS"
+def_bootlang="sr_RS"
+if [ -z "${keyboard}" ]; then
+  def_keyboard="sr"
+fi
+if [ -z "${timezone}" ]; then
+  def_timezone="Europe/Belgrade"
+fi
