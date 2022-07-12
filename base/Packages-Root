@@ -3,5 +3,9 @@
 mkinitcpio-nfs-utils
 squashfs-tools
 grub
-vim
+terminus-font
+btrfs-progs
+e2fsprogs
+xfsprogs
+f2fs-tools
 artix-live-@initsys@

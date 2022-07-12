@@ -1,7 +1,7 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 rm -rf /mnt/post_install.sh
-sleep 3s
+sleep 1s
 clear
 echo -ne "
 __________________________________________________________________________________________________________
@@ -23,7 +23,10 @@ ________________________________________________________________________________
 echo "Metis Linux Installation Finished!!!"
 echo "Umounting all the drives" 
 umount -R /mnt
-echo "And then rebooting in 10  seconds!!!"
 echo "After Reboot login your your username and password and type startx to start GUI."
-sleep 10s
+echo "If you've installed metis-os in a VM, it may be buggy or could perform abnormal, try disabling picom compositor."
+echo "AFTER REBOOTING RUN THE FOLLOWING COMMAND IN CASE OF NO NETWORK CONNECTIO: "
+echo "1. sudo ls -s /etc/runit/sv/NetworkManager /run/runit/service"
+echo "And then rebooting in 15 seconds!!!"
+sleep 20s
 reboot

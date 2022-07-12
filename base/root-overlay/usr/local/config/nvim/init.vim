@@ -134,7 +134,7 @@ if (has("termguicolors"))
     set termguicolors
 endif
 
-" Include the separate file for plugins (if exists)
+" Include the separate file for plugins and plugin related keybindings (if exists)
 if filereadable(expand("~/.config/nvim/plugins.vim"))
     source ~/.config/nvim/plugins.vim
 endif

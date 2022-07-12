@@ -1,184 +1,308 @@
-#!/usr/bin/env sh
-echo -ne "
-__________________________________________________________________________________________________________
-|                                                                                                         |
-|                       +-+-+-+-+-+        +-+-+-+-+-+        +-+-+-+-+-+-+-+-+-+                         |
-|                       |M|a|g|i|c|        |M|e|t|i|s|        |I|n|s|t|a|l|l|e|r|                         |
-|                       +-+-+-+-+-+        +-+-+-+-+-+        +-+-+-+-+-+-+-+-+-+                         |
-|                                                                                                         |
-|---------------------------------------------------------------------------------------------------------|
-|                                 Official Cli installer for metis linux.                                 |
-|---------------------------------------------------------------------------------------------------------|
-|                                 Install Metis Linus in few clicks                                       |
-|               Check: https://github.com/metis-os for details or visit https://metislinux.org            |
-|---------------------------------------------------------------------------------------------------------|
-|_________________________________________________________________________________________________________|
+#!/usr/bin/env bash
 
-"
-sleep 3s
-echo "Internet Connection is a must to begin."
-echo "Installing terminus font for better view."
-pacman -Sy --needed --noconfirm terminus-font
-setfont ter-v22b
-sleep 2s
-clear
+networkError() {
+  sleep 2s
+  clear
+  echo -e "Couldnot connect to the internet.\nCheck your Internet Connection and please try again.\nExitting..."
+  sleep 2s
+  exit 1
+}
 
-echo -ne "
-------------------------------------------------------------------------
-        THIS WILL FORMAT AND DELETE ALL DATA ON THE DISK
-      Please make sure you know what you are doing because
-    after formating your disk there is no way to get data back
-------------------------------------------------------------------------
-"
-sleep 3s
-lsblk
-echo "Enter the drive to install metis linux on it."
-echo "Enter Drive (eg. sda or vda or nvme0n1): "
-read -r drive
-sleep 2s
-clear
+failed() {
+  sleep 2s
+  clear
+  echo -e "Something went wrong.\nThe command could not be executed correctly!\nPlease try again.\nExitting..."
+  sleep 2s
+  exit 1
+}
 
-lsblk
-echo "Choose a familier disk utility tool to partition your drive!"
-echo " 1. fdisk"
-echo " 2. cfdisk"
-echo " 3. gdisk"
-echo " 4. parted"
-read -r partitionutility
+installationError() {
+  sleep 2s
+  clear
+  echo -e "Something went wrong.\nAll the packages couldn't be installed correctly!\nPlease try again.\nExitting..."
+  sleep 2s
+  exit 1
+}
 
-case "$partitionutility" in
-  1 | fdisk | Fdisk | FDISK)
-  partitionutility="fdisk"
-  ;;
-  2 | cfdisk | Cfdisk | CFDISK)
-  partitionutility="cfdisk"
-  ;;
-  3 | gdisk | Gdisk | GDISK)
-  partitionutility="gdisk"
-  ;;
-  4 | parted | Parted | PARTED)
-  partitionutility="parted"
-  ;;
-  *)
-  echo "Unknown or unsupported disk utility! Default = cfdisk."
-  partitionutility="cfdisk"
-  ;;
-esac
-echo "$partitionutility is the selected disk utility tool for partition."
-sleep 3s
-clear
-echo "Getting ready for creating partitions!"
-echo "boot partition is mandatory for uefi systems. Skip it for legacy systems"
-echo "root partition is mandatory."
-echo "home and swap partitions are optional but recommended!"
-echo "Also, you can create a separate partition for timeshift backup (optional)!"
-echo "Getting ready in 15 seconds"
-sleep 15s
-"$partitionutility" /dev/"$drive"
-clear
-lsblk
-echo " 1. ext4"
-echo " 2. xfs"
-echo " 3. btrfs"
-echo " 4. f2fs"
-echo " Boot partition will be formatted later in fat32 file system type if you have created one."
-echo "choose your linux file system type for formatting drives: "
-read -r filesystemtype
+configError() {
+  sleep 2s
+  clear
+  echo "Checking configs in new system..."
+  if ! ls /mnt/config  &> /dev/null; then 
+    echo -e "Reuired config files couldn't be copied to new system. Installation failed!\nAborting..."
+    exit 1
+  else
+    ls /mnt/config
+    echo "All good..."
+    sleep 5s
+  fi
+}
 
-case "$filesystemtype" in
-  1 | ext4 | Ext4 | EXT4)
-  filesystemtype="ext4"
-  ;;
-  2 | xfs | Xfs | XFS)
-  filesystemtype="xfs"
-  ;;
-  3 | btrfs | Btrfs | BTRFS)
-  filesystemtype="btrfs"
-  ;;
-  4 | f2fs | F2fs | F2FS)
-  filesystemtype="f2fs"
-  ;;
-  *)
-  echo "Unknown or unsupported Filesystem. Default = ext4."
-  filesystemtype="ext4"
-  ;;
-esac
-echo "$filesystemtype is the selected file system type."
-sleep 3s
-clear
-echo "Getting ready for formatting drives."
-sleep 3s
-lsblk
-echo "Enter the root partition (eg: sda1 or nvme0n1p2 or vda4): "
-read -r rootpartition
-mkfs."$filesystemtype" /dev/"$rootpartition"
-mount /dev/"$rootpartition" /mnt
-clear
-lsblk
-read -p "Did you also create separate home partition? [y/n]: " answerhome
-case "$answerhome" in
-  y | Y | yes | Yes | YES)
-  echo "Enter home partition (eg: sda2 or nvme0n1p1 or vda2): "
-  read -r homepartition
-  mkfs."$filesystemtype" /dev/"$homepartition"
-  mkdir /mnt/home
-  mount /dev/"$homepartition" /mnt/home
-  ;;
-  *)
-  echo "Skipping home partition!"
-  ;;
-esac
-clear
-lsblk
-read -p "Did you also create swap partition? [y/n]: " answerswap
-case "$answerswap" in
-  y | Y | yes | Yes | YES)
-  echo "Enter swap partition (eg: sda3, nvme0n1p1or vda3): "
-  read -r swappartition
-  mkswap /dev/"$swappartition"
-  swapon /dev/"$swappartition"
-  ;;
-  *)
-  echo "Skipping Swap partition!"
-  ;;
-esac
+ignoreableErrors() {
+  sleep 2s
+  clear
+  echo -e "Something went wrong.\nThe command was not executed correctly!\nThe error can be negleted as it doesn't affect our installation.\nContinuing the installation..."
+  sleep 3s
+}
 
-clear
-lsblk
-sleep 3s
-clear
-echo "Installing Base system"
-sleep 2s
-basestrap /mnt base base-devel runit elogind-runit
-sleep 2s
-echo "Installing Kernel"
- basestrap /mnt linux-zen linux-firmware linux-zen-headers
-clear
-echo "generating fstab file"
-fstabgen -U /mnt > /mnt/etc/fstab
-sleep 1s
-clear
-echo "Checking Fstab Contents"
-cat /mnt/etc/fstab
-sleep 2s
-echo "Copying config files to new system"
-cp /usr/bin/artix-chroot /usr/bin/metis-chroot
-cp /usr/local/bin/post_install.sh /mnt
-cp /usr/local/bin/os-release /mnt
-cp /usr/local/bin/grub /mnt
-cp /usr/local/bin/xinitrc /mnt
-cp /usr/local/bin/pacman.conf /mnt
-cp /usr/local/bin/mirrorlist /mnt
-cp /usr/local/bin/metis-mirrorlist /mnt
-cp /usr/local/bin/init.vim /mnt
-cp /usr/local/bin/zshrc /mnt
-cp /usr/local/bin/picom.conf /mnt
-echo "Checking configs in system"
-ls /mnt
-sleep 5s
-clear
-echo "First Phase Completed!"
-echo "Entering into Second Phase of Installation..."
-echo "run the following command to start second phase"
-echo "1. metis-chroot /mnt"
-echo "2. ./post_install.sh"
+updateMirrors() {
+  sleep 2s
+  clear
+  if ! which rankmirrors &> /dev/null; then 
+    echo -e "rankmirrors command not found\nCouldn't update the repository mirrorlists\nContinuing without updating mirrors have got chances of installation failure..."
+  else
+    echo -e "\nUpdating latest and fastest mirrorlists to download packages faster.\nBe patient, this may take some time upto few minutes..."
+    rankmirrors -n 20 /etc/pacman.d/mirrorlist > /etc/pacman.d/mirrorlist.new
+    mv /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak || ignoreableErrors
+    mv /etc/pacman.d/mirrorlist.new /etc/pacman.d/mirrorlist || failed
+    echo "Mirrorlists updated..."
+    sleep 2s
+  fi
+}
+
+checkingConnection() {
+  sleep 2s
+  clear
+  echo "Checking internet connection..."
+  ping -c 3 metislinux.org || networkError
+  echo  "Cool! Internet Connection Available. Getting ready for installation..."
+  sleep 3s
+}
+
+settingFont() {
+  sleep 2s
+  clear
+  echo "Setting bigger font for better readability..." 
+  sleep 2s
+  setfont ter-v22b || ignoreableErrors
+}
+
+displayArt(){
+  sleep 2s
+  clear
+  echo -ne "
+  __________________________________________________________________________________________________________
+  |                                                                                                         |
+  |                       +-+-+-+-+-+        +-+-+-+-+-+        +-+-+-+-+-+-+-+-+-+                         |
+  |                       |M|a|g|i|c|        |M|e|t|i|s|        |I|n|s|t|a|l|l|e|r|                         |
+  |                       +-+-+-+-+-+        +-+-+-+-+-+        +-+-+-+-+-+-+-+-+-+                         |
+  |                                                                                                         |
+  |---------------------------------------------------------------------------------------------------------|
+  |                                 Official Cli installer for metis linux.                                 |
+  |---------------------------------------------------------------------------------------------------------|
+  |                                 Install Metis Linus in few clicks                                       |
+  |               Check: https://github.com/metis-os for details or visit https://metislinux.org            |
+  |---------------------------------------------------------------------------------------------------------|
+  |_________________________________________________________________________________________________________|
+  "
+}
+
+checkDrive(){
+  if ! lsblk | grep "$drive" &> /dev/null ; then
+    clear
+    echo -e "$drive is not found. Check your available disks and try again.\nAborting installation\nInstallation failed..."
+    exit 1
+  fi
+}
+
+diskPartition(){
+  sleep 2s
+  clear
+  echo -ne "
+  ------------------------------------------------------------------------
+          THIS WILL FORMAT AND DELETE ALL DATA ON THE DISK
+        Please make sure you know what you are doing because
+      after formating your disk there is no way to get data back
+  ------------------------------------------------------------------------
+  "
+  lsblk
+  echo "Enter the drive to install metis linux on it."
+  echo "Enter Drive (eg. sda or vda or nvme0n1): "
+  read -r drive
+  checkDrive
+  sleep 2s
+  clear
+  lsblk
+  echo "Choose a familier disk utility tool to partition your drive! [Default=cfdisk]: "
+  echo " 1. fdisk"
+  echo " 2. cfdisk"
+  echo " 3. gdisk"
+  echo " 4. parted"
+  read -r partitionutility
+
+  case "$partitionutility" in
+    1 | fdisk | Fdisk | FDISK)
+    partitionutility="fdisk"
+    ;;
+    2 | cfdisk | Cfdisk | CFDISK)
+    partitionutility="cfdisk"
+    ;;
+    3 | gdisk | Gdisk | GDISK)
+    partitionutility="gdisk"
+    ;;
+    4 | parted | Parted | PARTED)
+    partitionutility="parted"
+    ;;
+    *)
+    echo "Unknown or unsupported disk utility! Default = cfdisk."
+    partitionutility="cfdisk"
+    ;;
+  esac
+  echo "$partitionutility is the selected disk utility tool for partition."
+  echo "Getting ready for creating partitions!"
+  sleep 2s
+  clear
+  echo "boot partition is mandatory for uefi systems. Skip it for legacy systems"
+  echo "root partition is mandatory."
+  echo "home and swap partitions are optional but recommended!"
+  echo "Also, you can create a separate partition for timeshift backup (optional)!"
+  echo "Getting ready in 15 seconds"
+  sleep 15s
+  "$partitionutility" /dev/"$drive"
+  clear
+  lsblk
+  echo " 1. ext4"
+  echo " 2. xfs"
+  echo " 3. btrfs"
+  echo " 4. f2fs"
+  echo " Boot partition will be formatted later in fat32 file system (for uefi systems only)."
+  echo "Choose your linux file system type for formatting drives [default=ext4]: "
+  read -r filesystemtype
+
+  case "$filesystemtype" in
+    1 | ext4 | Ext4 | EXT4)
+    filesystemtype="ext4"
+    ;;
+    2 | xfs | Xfs | XFS)
+    filesystemtype="xfs"
+    ;;
+    3 | btrfs | Btrfs | BTRFS)
+    filesystemtype="btrfs"
+    ;;
+    4 | f2fs | F2fs | F2FS)
+    filesystemtype="f2fs"
+    ;;
+    *)
+    echo "Unknown or unsupported Filesystem. Default = ext4."
+    filesystemtype="ext4"
+    ;;
+  esac
+  echo "$filesystemtype is the selected file system type."
+  echo "Getting ready for formatting drives."
+  sleep 3s
+  clear
+  lsblk
+  echo "Enter the root partition (eg: sda1 or nvme0n1p2 or vda4): "
+  read -r rootpartition
+  mkfs."$filesystemtype" /dev/"$rootpartition"
+  mount /dev/"$rootpartition" /mnt
+  if mountpoint /mnt = "/mnt is not a mountpoint"; then
+    clear
+    echo -e "$rootpartition is not mounted successfully. Aborting installation!\nInstallation failed..."
+    exit 1
+  else
+    echo "Cool $rootpartition mounted at /mnt"
+    sleep 2s
+  fi
+
+  clear
+  lsblk
+  echo "Did you also create separate home partition? [y/n]: " 
+  read -r answerhome
+  case "$answerhome" in
+    y | Y | yes | Yes | YES)
+    echo "Enter home partition (eg: sda2 or nvme0n1p1 or vda2): "
+    read -r homepartition
+    mkfs."$filesystemtype" /dev/"$homepartition"
+    mkdir /mnt/home
+    mount /dev/"$homepartition" /mnt/home
+    if mountpoint /mnt/home = "/mnt/home is not a mountpoint"; then
+      clear
+      echo -e "$homepartition is not mounted successfully. Aborting installation!\nInstallation failed..."
+      exit 1
+    else
+      echo "Cool $homepartition mounted at /mnt/home"
+      sleep 2s
+    fi
+    ;;
+    *)
+    echo "Skipping home partition!"
+    ;;
+  esac
+  clear
+  lsblk
+  echo  "Did you also create swap partition? [y/n]: "
+  read -r answerswap
+  case "$answerswap" in
+    y | Y | yes | Yes | YES)
+    echo "Enter swap partition (eg: sda3, nvme0n1p1or vda3): "
+    read -r swappartition
+    mkswap /dev/"$swappartition"
+    swapon /dev/"$swappartition"
+    ;;
+    *)
+    echo "Skipping Swap partition!"
+    ;;
+  esac
+  lsblk
+  sleep 2s
+}
+
+installingBase() {
+  sleep 2s
+  clear
+  echo "Installing Base system..."
+  basestrap /mnt base base-devel runit elogind-runit || installationError
+  sleep 2s
+}
+
+installingKernel() {
+  sleep 2s
+  clear
+  echo "Installing Zen Kernel with its headers and firmware..."
+  basestrap /mnt linux-zen linux-firmware linux-zen-headers || installationError
+  sleep 2s
+}
+
+generatingFstab() {
+  sleep 2s
+  clear
+  echo "generating fstab file"
+  fstabgen -U /mnt > /mnt/etc/fstab || failed
+  echo "Checking Fstab Contents..."
+  cat /mnt/etc/fstab
+  sleep 3s
+}
+
+copyingConfig() {
+  sleep 2s
+  clear
+  echo "Copying config files to new system..."
+  cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist || ignoreableErrors
+  cp /etc/pacman.d/metis-mirrorlist /mnt/etc/pacman.d/metis-mirrorlist || failed
+  cp /etc/pacman.conf /mnt/etc/pacman.conf || failed
+  mv /usr/local/config/post_install.sh /mnt/ || failed
+  cp -r /usr/local/config /mnt
+  configError
+}
+
+firstphaseCompleted(){
+  sleep 2s
+  clear
+  echo "First Phase Completed!"
+  echo "Entering into Second Phase of Installation..."
+  echo "Run the following commands to start second phase..."
+  echo "1. metis-chroot /mnt"
+  echo "2. ./post_install.sh"
+}
+
+displayArt
+settingFont
+checkingConnection
+updateMirrors
+diskPartition
+installingBase
+installingKernel
+generatingFstab
+copyingConfig
+firstphaseCompleted
