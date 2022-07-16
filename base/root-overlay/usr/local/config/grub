@@ -1,7 +1,7 @@
 # GRUB boot loader configuration
 
 GRUB_DEFAULT=0
-GRUB_TIMEOUT=5
+GRUB_TIMEOUT=0
 GRUB_DISTRIBUTOR="Metis"
 GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3 quiet console=tty2"
 GRUB_CMDLINE_LINUX=""

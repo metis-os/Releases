@@ -8,4 +8,5 @@ btrfs-progs
 e2fsprogs
 xfsprogs
 f2fs-tools
+metis-sideload
 artix-live-@initsys@

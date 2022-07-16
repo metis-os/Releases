@@ -11,7 +11,7 @@ export IP="2334242343"
 # History in cache directory:
 HISTSIZE=10000000
 SAVEHIST=10000000
-HISTFILE=~/.cache/zsh/history
+HISTFILE=~/history
 export PATH=$PATH:/$HOME/.local/bin
 # Load aliases and shortcuts if existent.
 [ -f "${XDG_CONFIG_HOME:-$HOME/.config}/shell/shortcutrc" ] && source "${XDG_CONFIG_HOME:-$HOME/.config}/shell/shortcutrc"
@@ -62,8 +62,10 @@ lfcd () {
         [ -d "$dir" ] && [ "$dir" != "$(pwd)" ] && cd "$dir"
     fi
 }
-bindkey -s '^o' 'lfcd\n'
+#ALIAS
+alias vim="nvim"
 
+bindkey -s '^o' 'lfcd\n'
 
 bindkey -s '^f' 'cd "$(dirname "$(fzf)")"\n'
 
