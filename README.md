@@ -6,5 +6,5 @@
 </p>
 
 <p align="center">
-Yet another minimal linux distribution for chads! <a href="https://artixlinux.org">Artix Linux</a>.
+Yet another minimal<a href="https://artixlinux.org">Artix Linux</a> linux distribution for chads !
 </p>
