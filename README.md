@@ -12,8 +12,9 @@
   <a href="https://metislinux.org/wiki" target="_blank"><img alt="wiki" src="https://img.shields.io/badge/WIKI-blue?style=flat-square"></a>
   <a href="https://www.reddit.com/r/metislinux" target="_blank"><img alt="reddit" src="https://img.shields.io/badge/REDDIT-yellow?style=flat-square"></a>
   <a href="https://t.me/metislinux" target="_blank"><img alt="telegram" src="https://img.shields.io/badge/TELEGRAM-green?style=flat-square"></a>
-  <a href="https://reddit.com/u/Nabeen0x01"><img src="https://img.shields.io/badge/Reddit-FF4500?style=for-the-badge&logo=reddit&logoColor=white"></a> 
-    
+    <a href="https://twitter.com/Nabeen0x01">
+  <img src="https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white">
+</a>     
 </p>
 
 
