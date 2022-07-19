@@ -11,7 +11,7 @@
   <a href="https://metislinux.org" target="_blank"><img alt="home" src="https://img.shields.io/badge/HOME-red?style=flat-square"></a>
   <a href="https://metislinux.org/wiki" target="_blank"><img alt="wiki" src="https://img.shields.io/badge/WIKI-blue?style=flat-square"></a>
   <a href="https://www.reddit.com/r/metislinux" target="_blank"><img alt="reddit" src="https://img.shields.io/badge/REDDIT-yellow?style=flat-square"></a>
-   <a href="https://www.reddit.com/r/archcraft" target="_blank"><img alt="reddit" src="https://img.shields.io/badge/TWITTER-pink?style=flat-square"></a>
+   <a href="https://www.reddit.com/r/archcraft" target="_blank"><img alt="reddit" src="https://img.shields.io/badge/TWITTER-green?style=flat-square"></a>
 </p>
 
 
