@@ -1,5 +1,14 @@
 <p align="center">METIS LINUX</p>
 
+
+
+<p align="center">
+  <a href="https://metislinux.org" target="_blank"><img alt="home" src="https://img.shields.io/badge/HOME-red?style=flat-square"></a>
+  <a href="https://metisliux.org/wiki" target="_blank"><img alt="wiki" src="https://img.shields.io/badge/WIKI-blue?style=flat-square"></a>
+  <a href="https://www.reddit.com/r/metislinux" target="_blank"><img alt="reddit" src="https://img.shields.io/badge/REDDIT-yellow?style=flat-square"></a>
+  <a href="https://t.me/metislinux" target="_blank"><img alt="telegram" src="https://img.shields.io/badge/TELEGRAM-green?style=flat-square"></a>
+ 
+</p>
 <p align="center">
   <img src="https://img.shields.io/badge/Maintained%3F-Yes-green?style=flat-square">
   <img src="https://img.shields.io/github/downloads/metis-os/metis-iso/total?label=downloads&logo=github&color=blue&style=flat-square">
