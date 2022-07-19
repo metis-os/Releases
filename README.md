@@ -12,6 +12,9 @@
   <a href="https://metislinux.org/wiki" target="_blank"><img alt="wiki" src="https://img.shields.io/badge/WIKI-blue?style=flat-square"></a>
   <a href="https://www.reddit.com/r/metislinux" target="_blank"><img alt="reddit" src="https://img.shields.io/badge/REDDIT-yellow?style=flat-square"></a>
    <a href="https://www.reddit.com/r/archcraft" target="_blank"><img alt="reddit" src="https://img.shields.io/badge/TWITTER-green?style=flat-square"></a>
+  <a href="mailto:info@metislinux.org">
+  <img src="https://img.shields.io/badge/Gmail-D14836?style=flat-square&logo=gmail&logoColor=white">
+</a> 
 </p>
 
 
