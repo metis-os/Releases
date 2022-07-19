@@ -13,7 +13,7 @@ Yet another minimal <a href="https://artixlinux.org">Artix</a> based distributio
 - **`ISO`** : [metis-base-runit-20220717-v1.1.1-x86_64.iso](https://github.com/metis-os/metis-iso/releases/download/v1.1.1/metis-base-runit-20220717-v1.1.1-x86_64.iso)
 - **`md5sum`** : [metis-base-runit-20220717-v1.1.1-x86_64.iso.md5sum](https://github.com/metis-os/metis-iso/releases/download/v1.1.1/metis-base-runit-20220717-v1.1.1-x86_64.iso.md5sum)
 - **`sha256sum`** : [metis-base-runit-20220717-v1.1.1-x86_64.iso.sha256sum](https://github.com/metis-os/metis-iso/releases/download/v1.1.1/metis-base-runit-20220717-v1.1.1-x86_64.iso.sha256sum)
-- Verify the `sha256sum` by running :
+- Verify the `iso` by running :
 ```
 $ sha256sum -c metis-base-runit-20220717-v1.1.1-x86_64.iso
 ```
