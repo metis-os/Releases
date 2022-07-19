@@ -1,4 +1,4 @@
-### <center>METIS LINUX </center>
+<center>METIS LINUX </center>
 
 <p align="center">
   <img src="https://img.shields.io/badge/Maintained%3F-Yes-green?style=flat-square">
