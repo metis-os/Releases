@@ -1,6 +1,6 @@
-<p align="center">METIS LINUX</p>
 <p align="center">
   <a href="https://metislinux.org"><img src="https://raw.githubusercontent.com/metis-os/metis-iso/main/assets/logo.png" height="100" width="100" alt="METIS LINUX"></a>
+  <p align="center">METIS LINUX</p>
 </p>
 <p align="center">
   <img src="https://img.shields.io/badge/Maintained%3F-Yes-green?style=flat-square">
