@@ -8,13 +8,13 @@
 <p align="center">
 Yet another minimal <a href="https://artixlinux.org">Artix</a> based distribution for chads !
 </p>
-<p>
+#
 ### Latest Release
 - **`ISO`** : [metis-base-runit-20220717-v1.1.1-x86_64.iso](https://github.com/metis-os/metis-iso/releases/download/v1.1.1/metis-base-runit-20220717-v1.1.1-x86_64.iso)
 ### Verify the authenticity of the ISO
 - **`SIG`** : [metis-base-runit-20220717-v1.1.1-x86_64.iso](https://github.com/metis-os/metis-iso/releases/download/v1.1.1/metis-base-runit-20220717-v1.1.1-x86_64.iso.sha256sum)
 - **`MD5`** : [metis-base-runit-20220717-v1.1.1-x86_64.iso](https://github.com/metis-os/metis-iso/releases/download/v1.1.1/metis-base-runit-20220717-v1.1.1-x86_64.iso.md5)
-</p>
+
 
 - Finally, Verify the `sha256sum` by running :
 ```
