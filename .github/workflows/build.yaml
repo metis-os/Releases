@@ -20,10 +20,9 @@ jobs:
       - uses: actions/checkout@v3
       - name: Installing artools in the system
         run: |
-          
           pacman --noconfirm -Sy ruby artools iso-profiles man-pages man
 
-      - name: Setting up  filesystem for the build
+      - name: Setting up filesystem for the build
         run: |
           dd if=/dev/zero of=/tmp/loopfs.img bs=1024 count=8000000
           losetup /dev/loop3 /tmp/loopfs.img
@@ -31,7 +30,7 @@ jobs:
           mkdir -p /var/lib/artools
           mount /dev/loop3 /var/lib/artools
 
-      - name: Building  image may takes up to 6 minutes..
+      - name: Building image (may take up to 6 minutes)
         run: |
           mkdir ~/artools-workspace/iso-profiles -p
           cp base ~/artools-workspace/iso-profiles -r
@@ -50,12 +49,21 @@ jobs:
           ISO_PATH=$(find ~/artools-workspace/iso -name "artix-base-runit-${{ env.NOW }}-x86_64.iso" | head -n 1)
           echo "ISO_PATH=$ISO_PATH" >> $GITHUB_ENV
 
-      - name: Uploading image to releases
+      - name: Generate SHA256 checksum
+        run: |
+          CHECKSUM=$(sha256sum "${ISO_PATH}" | awk '{print $1}')
+          echo "CHECKSUM=$CHECKSUM" >> $GITHUB_ENV
+
+      - name: Uploading image and checksum to releases
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: ${{ env.ISO_PATH }}
-          asset_name: metis-linux-runit-${{ env.NOW }}-x86_64.iso
+          files: |
+            ${{ env.ISO_PATH }}
+            <(echo "${CHECKSUM}  ${ISO_PATH}" > checksum.txt)
+          asset_names: |
+            metis-linux-runit-${{ env.NOW }}-x86_64.iso
+            metis-linux-runit-${{ env.NOW }}-x86_64.iso.sha256
           tag: MetisLinux-${{ env.NOW }}
           overwrite: true 
           body: This is the release of Metis Linux ISO on ${{ env.NOW }}
