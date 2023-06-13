@@ -56,19 +56,20 @@ jobs:
           echo "CHECKSUM=$CHECKSUM" >> $GITHUB_ENV
           echo "::set-output name=checksum::$CHECKSUM"
 
-      - name: Uploading image and checksum to releases
+      - name: Create checksum file
+        run: |
+          echo "${{ steps.generate_checksum.outputs.checksum }}  ${{ steps.find_iso.outputs.iso_path }}" > checksum.txt
+
+      - name: Upload image and checksum to releases
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: ${{ steps.find_iso.outputs.iso_path }}
-          asset_name: metis-linux-runit-${{ env.NOW }}-x86_64.iso
+          files: |
+            ${{ steps.find_iso.outputs.iso_path }}
+            checksum.txt
+          asset_names: |
+            metis-linux-runit-${{ env.NOW }}-x86_64.iso
+            metis-linux-runit-${{ env.NOW }}-x86_64.iso.sha256
           tag: MetisLinux-${{ env.NOW }}
           overwrite: true 
           body: This is the release of Metis Linux ISO on ${{ env.NOW }}
-          asset_content_type: application/octet-stream
-
-      - name: Uploading checksum file
-        uses: actions/upload-artifact@v2
-        with:
-          name: metis-linux-runit-${{ env.NOW }}-x86_64.iso.sha256
-          path: checksum.txt
