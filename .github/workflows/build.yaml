@@ -1,5 +1,5 @@
 # GHW workflow to build metislinux iso 
-name: Build Metis Linux ISO per Release
+name: build metis iso per release
 on:
   push:
 
@@ -7,7 +7,6 @@ env:
   api_key: ${{ secrets.GITHUB_TOKEN }}
   name: ${{ github.event.repository.name }}
   release_name: ${{ github.ref_name }}
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -17,14 +16,14 @@ jobs:
       options: --privileged
 
     steps:
-      - name: Cloning the repository
-        uses: actions/checkout@v3
-
-      - name: Installing artools and dependencies
+      # - name: Cloning the repository! please wait...
+      - uses: actions/checkout@v3
+      - name: Installing artools in the system
         run: |
+          
           pacman --noconfirm -Sy ruby artools iso-profiles man-pages man
 
-      - name: Setting up filesystem for the build
+      - name: Setting up  filesystem for the build
         run: |
           dd if=/dev/zero of=/tmp/loopfs.img bs=1024 count=8000000
           losetup /dev/loop3 /tmp/loopfs.img
@@ -32,44 +31,31 @@ jobs:
           mkdir -p /var/lib/artools
           mount /dev/loop3 /var/lib/artools
 
-      - name: Building image (may take up to 6 minutes)
+      - name: Building  image may takes up to 6 minutes..
         run: |
           mkdir ~/artools-workspace/iso-profiles -p
           cp base ~/artools-workspace/iso-profiles -r
           mkdir ~/.config/artools -p
+          
           cp config/pacman.conf /usr/share/artools/pacman.conf.d/default.conf
           cp -r config/me* /etc/pacman.d/
+
           ./build-iso.sh 
+          #buildiso -q -i runit
+          #buildiso -p base -i runit -t iso
           echo "NOW=$(date +'%Y%m%d')" >> $GITHUB_ENV
 
       - name: Find ISO path and name
-        id: find_iso
         run: |
           ISO_PATH=$(find ~/artools-workspace/iso -name "artix-base-runit-${{ env.NOW }}-x86_64.iso" | head -n 1)
           echo "ISO_PATH=$ISO_PATH" >> $GITHUB_ENV
-          echo "::set-output name=iso_path::$ISO_PATH"
 
-      - name: Generate SHA256 checksum
-        id: generate_checksum
-        run: |
-          CHECKSUM=$(sha256sum "${{ steps.find_iso.outputs.iso_path }}" | awk '{print $1}')
-          echo "CHECKSUM=$CHECKSUM" >> $GITHUB_ENV
-          echo "::set-output name=checksum::$CHECKSUM"
-
-      - name: Create checksum file
-        run: |
-          echo "${{ steps.generate_checksum.outputs.checksum }}  ${{ steps.find_iso.outputs.iso_path }}" > checksum.txt
-
-      - name: Upload image and checksum to releases
+      - name: Uploading image to releases
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          files: |
-            ${{ steps.find_iso.outputs.iso_path }}
-            checksum.txt
-          asset_names: |
-            metis-linux-runit-${{ env.NOW }}-x86_64.iso
-            metis-linux-runit-${{ env.NOW }}-x86_64.iso.sha256
+          file: ${{ env.ISO_PATH }}
+          asset_name: metis-linux-runit-${{ env.NOW }}-x86_64.iso
           tag: MetisLinux-${{ env.NOW }}
           overwrite: true 
           body: This is the release of Metis Linux ISO on ${{ env.NOW }}
