@@ -1,0 +1,8 @@
+sentiment-configuration	sentiment.txt	/*sentiment-configuration*
+sentiment-demo	sentiment.txt	/*sentiment-demo*
+sentiment-features	sentiment.txt	/*sentiment-features*
+sentiment-highlight	sentiment.txt	/*sentiment-highlight*
+sentiment-installation	sentiment.txt	/*sentiment-installation*
+sentiment-table-of-contents	sentiment.txt	/*sentiment-table-of-contents*
+sentiment-usage	sentiment.txt	/*sentiment-usage*
+sentiment.txt	sentiment.txt	/*sentiment.txt*

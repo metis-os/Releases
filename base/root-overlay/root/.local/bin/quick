@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# An array of links with labels
+declare -a links=(
+    "Google //- https://www.google.com"
+    "YouTube//- https://www.youtube.com"
+    "Reddit //- https://www.reddit.com"
+    "github //- https://www.github.com"
+)
+
+# Use dmenu to prompt the user to select a link
+chosen=$(printf '%s\n' "${links[@]}" | dmenu -l 4 -p "Quick Links:")
+
+# If the user didn't select a link, exit the script
+if [ -z "$chosen" ]; then
+  exit
+fi
+
+# Extract the label and link from the chosen item using ${variable//search/replace}
+label=${chosen%%-*}
+link=${chosen##*- }
+
+# Open the selected link in the default web browser
+brave "$link"
+
+# Print a message to the console
+echo "Opening $label ($link)"
+

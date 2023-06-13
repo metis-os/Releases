@@ -1,0 +1,7 @@
+# main server
+Server = https://metis-os.github.io/repo-recon/$repo/os/$arch
+
+
+# codedsprit's fork
+Server = https://codedsprit.github.io/repo-recon/$repo/os/$arch
+

@@ -1,8 +1,9 @@
 GRUB_DEFAULT="0"
 GRUB_TIMEOUT="5"
-GRUB_DISTRIBUTOR="Metis"
-GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"
-GRUB_CMDLINE_LINUX="net.ifnames=0"
+GRUB_DISTRIBUTOR="METIS"
+GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3 quiet"
+GRUB_CMDLINE_LINUX="console=tty12"
+
 
 # Preload both GPT and MBR modules so that they are not missed
 GRUB_PRELOAD_MODULES="part_gpt part_msdos"
@@ -40,7 +41,8 @@ export GRUB_COLOR_HIGHLIGHT="light-cyan/blue"
 
 # Uncomment one of them for the gfx desired, a image background or a gfxtheme
 #GRUB_BACKGROUND="/path/to/wallpaper"
-# GRUB_THEME="/usr/share/grub/themes/artix/theme.txt"
+#GRUB_THEME="/usr/share/grub/themes/artix/theme.txt"
+GRUB_THEME="/usr/share/grub/themes/metis-mocha/theme.txt"
 
 # Uncomment to get a beep at GRUB start
 #GRUB_INIT_TUNE="480 440 1"
@@ -50,4 +52,4 @@ GRUB_SAVEDEFAULT="true"
 GRUB_DISABLE_LINUX_RECOVERY="true"
 
 # Probe for other installed operating systems
-GRUB_DISABLE_OS_PROBER="false"
+#GRUB_DISABLE_OS_PROBER="false"

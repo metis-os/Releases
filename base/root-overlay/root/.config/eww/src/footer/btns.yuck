@@ -1,0 +1,34 @@
+(defwidget btn [name command class]
+  (box :orientation "v"
+       :halign "center"
+       :class "btnMargin"
+    (button :onclick command 
+        :class "btn ${class}" 
+      name))
+)
+
+(defwidget btns []
+  (box :orientation "h"
+       :class 'footerBtns'
+ 
+  (btn :name ""
+  :command "dmenu_run"
+    :class "restart"
+  )
+
+(btn :name ""
+  :command "slock & doas zzz"
+  :class "lock"
+ )
+
+ (btn :name ""
+
+   :command "metis-dwm-script -q"
+   :class "quicklinks"
+  )
+
+ (btn :name "拉" 
+    :command "doas zzz"
+    :class "sleep"
+  )
+))

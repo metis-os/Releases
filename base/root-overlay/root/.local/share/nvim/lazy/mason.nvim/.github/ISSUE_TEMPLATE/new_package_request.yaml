@@ -1,0 +1,40 @@
+---
+
+name: New package request
+description: Request a new package not currently available
+title: "[New package]: "
+labels:
+    - new-package-request
+
+body:
+    - type: checkboxes
+      attributes:
+          label: I've searched open & closed issues for similar requests
+          description: If possible, please contribute to [existing issues](https://github.com/williamboman/mason.nvim/issues?q=is%3Aissue+label%3Anew-package-request) instead of opening a new one.
+          options:
+              - label: "Yes"
+
+    - type: input
+      attributes:
+          label: Package name
+          description: Which package would you like to request to be added?
+      validations:
+          required: true
+
+    - type: input
+      attributes:
+          label: Package homepage
+          description: e.g., a GitHub page
+      validations:
+          required: true
+
+    - type: input
+      attributes:
+          label: Languages
+          description: Which languages does this package target?
+          placeholder: typescript, javascript
+
+    - type: textarea
+      attributes:
+          label: How is this package distributed?
+          description: Is the package distributed through a standardized channel (such as GitHub release files, npm, pip, etc.)? Leave empty if you don't know.

@@ -1,0 +1,3 @@
+# main server
+Server = https://metis-os.github.io/repo-andromeda/$repo/os/$arch
+

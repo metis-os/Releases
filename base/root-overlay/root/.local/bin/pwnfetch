@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+# shellcheck source=/dev/null
+# shellcheck disable=2059
+. /etc/os-release
+
+FORMAT0="│ \x1b[38;5;%sm%s\x1b[0m %s │ "
+FORMAT="$FORMAT0\x1b[38;5;%sm%s\x1b[0m\n"
+DOT="● "
+PACMANPKGS=0
+KBToHuman() {
+    # https://unix.stackexchange.com/questions/44040/a-standard-tool-to-convert-a-byte-count-into-human-kib-mib-etc-like-du-ls1/259254#259254
+    b=${1:-0}; d=''; s=0; S=(Bytes {K,M,G,T,E,P,Y,Z}iB)
+    b=$(($b * 1024))
+    while ((b > 1024)); do
+        d="$(printf ".%02d" $((b % 1024 * 100 / 1024)))"
+        b=$((b / 1024))
+        let s++
+    done
+    echo "$b$d ${S[$s]}"
+}
+
+
+printf "╭─────────────╮\n"
+printf "$FORMAT" "1" " " "user    " 1 "$USER"
+printf "$FORMAT" "3" " " "host    " 3 "$(uname -n)"
+printf "$FORMAT" "2" " " "distro  " 2 "$PRETTY_NAME"
+printf "$FORMAT" "6" " " "kernel  " 6 "$(uname -sr)"
+printf "$FORMAT" "4" " " "uptime  " 4 "$(uptime -p | sed "s/^up //")"
+printf "$FORMAT" "5" " " "shell   " 5 "$(basename "$SHELL")"
+if ! [ -x "$(pacman -V)" ]; then
+    for _dir in /var/lib/pacman/local/*; do
+        PACMANPKGS=$((PACMANPKGS+1))
+    done
+    printf "$FORMAT" 1 " " "packages" 1 "$PACMANPKGS"
+fi
+printf "$FORMAT" 3 " " "ram     " 3 "$(KBToHuman "$(cat /proc/meminfo | grep -i 'memtotal' | grep -o '[[:digit:]]*')")"
+printf "├─────────────┤\n"
+printf "$FORMAT0\x1b[38;5;0m%s\x1b[38;5;1m%s\x1b[38;5;2m%s\x1b[38;5;3m%s\x1b[38;5;4m%s\x1b[38;5;5m%s\x1b[38;5;6m%s\x1b[38;5;7m%s\x1b[0m\n" 7 " " "colors  " "$DOT" "$DOT" "$DOT" "$DOT" "$DOT" "$DOT" "$DOT" "$DOT"
+printf "╰─────────────╯ \x1b[38;5;8m%s\x1b[38;5;9m%s\x1b[38;5;10m%s\x1b[38;5;11m%s\x1b[38;5;12m%s\x1b[38;5;13m%s\x1b[38;5;14m%s\x1b[38;5;15m%s\x1b[0m\n" "$DOT" "$DOT" "$DOT" "$DOT" "$DOT" "$DOT" "$DOT" "$DOT"
+printf "\n"

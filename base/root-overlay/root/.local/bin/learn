@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+
+# Set the directory and filename
+dir="$HOME/.local/share/learn"
+filename="$dir/words.csv"
+
+# Create the directory if it doesn't exist
+if [[ ! -d "$dir" ]]; then
+    mkdir -p "$dir"
+fi
+
+# Create the file if it doesn't exist
+if [[ ! -f "$filename" ]]; then
+    touch "$filename"
+fi
+
+# Prompt the user for an action using dmenu
+action=$(echo -e "Add a word\nView words and meanings" | dmenu -p "What would you like to do?")
+
+if [[ "$action" == "Add a word" ]]; then
+    # Prompt the user for a word using dmenu
+    word=$(echo "" | dmenu -p "Enter a word to add:")
+
+    # Prompt the user for the meaning of the word using dmenu
+    meaning=$(echo "" | dmenu -p "Enter the meaning of $word:")
+
+    # Append the word and its meaning to a CSV file
+    echo "\"$word\",\"$meaning\"" >>"$filename"
+
+    # Print a message confirming that the word was added
+    echo "$word added to $filename with meaning \"$meaning\""
+elif [[ "$action" == "View words and meanings" ]]; then
+    # Read the CSV file into an array
+    mapfile -t words <"$filename"
+
+    # Format the words and meanings
+    formatted_words=""
+    for word in "${words[@]}"; do
+        formatted_word=$(echo "$word" | sed 's/"//g' | sed 's/,/:  /')
+        formatted_words="$formatted_words$formatted_word\n"
+    done
+
+    # Display the formatted words and meanings using dmenu
+    echo -e "$formatted_words" | dmenu -l 10 -p "Words and meanings:"
+fi

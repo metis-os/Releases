@@ -1,0 +1,29 @@
+name: autogen
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  metadata-diff:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}
+
+      - uses: rhysd/action-setup-vim@v1
+        with:
+          neovim: true
+          version: nightly
+
+      - name: run autogen.sh script
+        run: bash ./scripts/autogen.sh
+
+      - name: commit changes
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "chore: autogen metadata and docs"

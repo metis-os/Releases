@@ -1,0 +1,13 @@
+#!/bin/sh
+
+if [ $# -lt 2 ]; then
+    echo "Usage: $0 <start-directory> <word-to-search>"
+    exit 1
+fi
+
+start_dir=$1
+word=$2
+
+# search for the word in all files within the subdirectories using ripgrep
+rg -niH -z "$word" "$start_dir" | sed 's/^/    /'
+

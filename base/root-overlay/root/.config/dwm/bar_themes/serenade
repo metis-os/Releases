@@ -1,0 +1,12 @@
+#!/bin/sh
+
+# colors
+
+black=#252540
+green=#83B588
+white=#D4D4E4
+grey=#3C3C5A
+blue=#6996D1
+red=#F08888
+darkblue=#4F7BA6
+

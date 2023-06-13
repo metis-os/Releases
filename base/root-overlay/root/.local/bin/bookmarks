@@ -1,0 +1,27 @@
+#!/bin/sh
+# Copyright PwnWriter || Permission is hereby granted.
+
+# Location of the bookmarks file
+bookmarks_file="$HOME/.config/BraveSoftware/Brave-Browser/Default/Bookmarks"
+
+# Extract the URLs and titles of the bookmarks
+bookmarks=$(jq -r '.["roots"]["bookmark_bar"]["children"] | .[] | select(.url != null) | [.url] | @tsv' "$bookmarks_file")
+
+# Sort the bookmarks by title
+sorted_bookmarks=$(echo "$bookmarks" | sort -k1)
+
+# Display the bookmarks in dmenu
+selected_bookmark=$(echo "$sorted_bookmarks" | dmenu -l 20 -i -p "Select a bookmark:")
+
+# If no bookmark is selected, exit the script
+if [ -z "$selected_bookmark" ]; then
+    exit 0
+fi
+
+# Extract the URL from the selected bookmark
+url=$(echo "$selected_bookmark" | awk '{print $NF}')
+
+# Open the URL in your default browser
+brave --incognito --app="$url"
+
+

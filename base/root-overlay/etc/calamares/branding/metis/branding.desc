@@ -1,0 +1,35 @@
+componentName:  metis 
+welcomeStyleCalamares:   false
+welcomeExpandingLogo:   true
+windowExpanding:    normal
+windowSize: 800px,520px
+windowPlacement: center
+sidebar: widget
+navigation: widget
+
+strings:
+    productName:         metislinux 
+    shortProductName:    metislinux 
+    version:             2021.01.1
+    shortVersion:        2021.01.1
+    versionedName:       metislinux 
+    shortVersionedName:  metislinux
+    bootloaderEntryName: metislinux 
+
+images:
+    productIcon:         "metis-logo.png"
+    productLogo:         "metis-logo.png"
+    productWelcome:      "languages.png"
+
+style:
+   sidebarBackground:    "#282a36"
+   sidebarText:          "#FFFFFF"
+   sidebarTextSelect:    "#FFFFFF"
+   sidebarTextHighlight: "#81A1C1"
+
+slideshow:               "show.qml"
+slideshowAPI: 2
+
+uploadServer :
+    type :    "fiche"
+    url :     "http://termbin.com:9999"

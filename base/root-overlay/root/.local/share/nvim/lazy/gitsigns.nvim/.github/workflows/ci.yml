@@ -1,0 +1,66 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  commit_lint:
+    runs-on: ubuntu-latest
+    steps:
+      # Check commit messages
+      - uses: webiny/action-conventional-commits@v1.1.0
+
+  build:
+    strategy:
+      fail-fast: true
+      matrix:
+        neovim_branch: ['v0.8.3', 'nightly']
+    runs-on: ubuntu-latest
+    env:
+      NEOVIM_BRANCH: ${{ matrix.neovim_branch }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Get Neovim SHA
+        id: get-nvim-sha
+        run: |
+          echo "sha=$(git ls-remote https://github.com/neovim/neovim ${{env.NEOVIM_BRANCH}} | cut -f1)" >> $GITHUB_OUTPUT
+
+      - name: Cache Deps
+        id: cache-deps
+        uses: actions/cache@v3
+        with:
+          path: deps
+          key: ${{ steps.get-nvim-sha.outputs.sha }}-${{ hashFiles('.github/workflows/ci.yml', 'Makefile') }}
+
+      - name: Install Neovim build dependencies
+        if: steps.cache-deps.outputs.cache-hit != 'true'
+        run: |
+          sudo apt-get update &&
+          sudo apt-get install -y \
+            cmake \
+            g++ \
+            gettext \
+            libtool-bin \
+            lua-bitop \
+            ninja-build \
+            unzip
+
+      - name: Build Neovim
+        if: steps.cache-deps.outputs.cache-hit != 'true'
+        run: make test_deps
+
+      - name: Install Lua Deps
+        run: make lua_deps
+
+      - name: Check lua files are built from latest teal
+        run: make tl-ensure
+
+      - name: Run Test
+        run: make test

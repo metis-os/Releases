@@ -1,0 +1,93 @@
+name: Bug report
+description: Report a problem with Catppuccin
+labels: [bug]
+body:
+  - type: textarea
+    attributes:
+      label: "Description"
+      description: "A short description of the problem you are reporting."
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: "Neovim version"
+      description: "Output of `nvim --version` (Catppuccin requires neovim >= 0.8)"
+      render: markdown
+      placeholder: |
+        NVIM v0.9.0
+        Build type: Release
+        LuaJIT 2.1.0-beta3
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: "Terminal and multiplexer"
+      placeholder: "kitty 0.27.1 with tmux 3.3"
+    validations:
+      required: true
+  - type: markdown
+    attributes:
+      value: |
+        # FOR TMUX USERS
+        FOLLOW THESE GIST BEFORE OPENING THE ISSUE
+        - [Enable true color support](https://gist.github.com/andersevenrud/015e61af2fd264371032763d4ed965b6) to fix the [abnormal colors](https://github.com/catppuccin/nvim/issues/415)
+        - [Enable italic font support](https://gist.github.com/gutoyr/4192af1aced7a1b555df06bd3781a722) to fix the [incorrect if, then, else, end highlights](https://github.com/catppuccin/nvim/issues/428)
+  - type: input
+    attributes:
+      label: "Catppuccin version / branch / rev"
+      placeholder: "catppuccin v1.1.0"
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: "Steps to reproduce"
+      description: "Steps to reproduce using the minimal config provided below."
+      placeholder: |
+        1. `nvim -u repro.lua`
+        2. ...
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: "Expected behavior"
+      description: "A description of the behavior you expected:"
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: "Actual behavior"
+      description: "Observed behavior (may optionally include logs, images, or videos)."
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Repro
+      description: Minimal `init.lua` to reproduce this issue. Save as `repro.lua` and run with `nvim -u repro.lua`
+      value: |
+        -- DO NOT change the paths and don't remove the colorscheme
+        local root = vim.fn.fnamemodify("./.repro", ":p")
+
+        -- set stdpaths to use .repro
+        for _, name in ipairs({ "config", "data", "state", "cache" }) do
+          vim.env[("XDG_%s_HOME"):format(name:upper())] = root .. "/" .. name
+        end
+
+        -- bootstrap lazy
+        local lazypath = root .. "/plugins/lazy.nvim"
+        if not vim.loop.fs_stat(lazypath) then
+          vim.fn.system({ "git", "clone", "--filter=blob:none", "https://github.com/folke/lazy.nvim.git", lazypath })
+        end
+        vim.opt.runtimepath:prepend(lazypath)
+
+        -- install plugins
+        local plugins = {
+          "catppuccin/nvim",
+          -- add any other plugins here
+        }
+        require("lazy").setup(plugins, {
+          root = root .. "/plugins",
+        })
+
+        vim.cmd.colorscheme("catppuccin")
+        -- add anything else here
+      render: Lua

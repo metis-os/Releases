@@ -1,0 +1,17 @@
+
+#!/bin/sh
+
+headvol() {
+  pactl list sinks | grep 'Volume: front-left' | awk '{print $5}' | tr -d '%'
+}
+
+mastervol() {
+  pactl list sinks | grep 'Volume: front-left' | awk '{print $5}' | tr -d '%'
+}
+
+micvol() {
+  pactl list sources | grep 'Volume: mono' | awk '{print $5}' | tr -d '%'
+}
+
+"$@"
+

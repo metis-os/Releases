@@ -1,0 +1,2 @@
+#!/bin/sh
+fzf --preview='bat --color=always --style=numbers --theme OneHalfDark {}' --preview-window=down

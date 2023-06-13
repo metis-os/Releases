@@ -1,4 +1,3 @@
-Server = https://mirrors.42tm.tech/artix-linux/$repo/os/$arch
 Server = https://mirror.funami.tech/artix/$repo/os/$arch
 Server = https://mirror.pascalpuffke.de/artix-linux/$repo/os/$arch
 Server = https://mirror.nju.edu.cn/artixlinux/$repo/os/$arch

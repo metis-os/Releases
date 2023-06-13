@@ -1,0 +1,62 @@
+# GHW workflow to build metislinux iso 
+name: build metis iso per release
+on:
+  push:
+
+env:
+  api_key: ${{ secrets.GITHUB_TOKEN }}
+  name: ${{ github.event.repository.name }}
+  release_name: ${{ github.ref_name }}
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    container:
+      image: artixlinux/runit:latest
+      options: --privileged
+
+    steps:
+      # - name: Cloning the repository! please wait...
+      - uses: actions/checkout@v3
+      - name: Installing artools in the system
+        run: |
+          
+          pacman --noconfirm -Sy ruby artools iso-profiles man-pages man
+
+      - name: Setting up  filesystem for the build
+        run: |
+          dd if=/dev/zero of=/tmp/loopfs.img bs=1024 count=8000000
+          losetup /dev/loop3 /tmp/loopfs.img
+          mkfs.ext4 /dev/loop3
+          mkdir -p /var/lib/artools
+          mount /dev/loop3 /var/lib/artools
+
+      - name: Building  image may takes up to 6 minutes..
+        run: |
+          mkdir ~/artools-workspace/iso-profiles -p
+          cp base ~/artools-workspace/iso-profiles -r
+          mkdir ~/.config/artools -p
+          
+          cp config/pacman.conf /usr/share/artools/pacman.conf.d/default.conf
+          cp -r config/me* /etc/pacman.d/
+
+          ./build-iso.sh 
+          #buildiso -q -i runit
+          #buildiso -p base -i runit -t iso
+          echo "NOW=$(date +'%Y%m%d')" >> $GITHUB_ENV
+
+      - name: Find ISO path and name
+        run: |
+          ISO_PATH=$(find ~/artools-workspace/iso -name "artix-base-runit-${{ env.NOW }}-x86_64.iso" | head -n 1)
+          echo "ISO_PATH=$ISO_PATH" >> $GITHUB_ENV
+
+      - name: Uploading image to releases
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: ${{ env.ISO_PATH }}
+          asset_name: metis-linux-runit-${{ env.NOW }}-x86_64.iso
+          tag: MetisLinux-${{ env.NOW }}
+          overwrite: true 
+          body: This is the release of Metis Linux ISO on ${{ env.NOW }}
+

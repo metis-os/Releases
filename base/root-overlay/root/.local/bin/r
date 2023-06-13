@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# check if file location passed as argument
+if [ -z "$1" ]
+then
+    echo "No file location passed, using default location: ~/output.mkv"
+    file_location=~/output.mkv
+else
+    file_location=$1
+fi
+
+# check if sound recording flag passed as argument
+if [ -z "$2" ]
+then
+    echo "No sound recording flag passed, recording with sound"
+    ffmpeg -f alsa -i default -f x11grab -s $(xrandr --current | grep '*' | uniq | awk '{print $1}') -r 30 -i :0.0 -acodec pcm_s16le -vcodec libx264 -preset ultrafast -tune zerolatency -crf 18 -pix_fmt yuv420p $file_location
+else
+    if [ "$2" == "nosound" ]
+    then
+        echo "Recording without sound"
+        ffmpeg -f x11grab -s $(xrandr --current | grep '*' | uniq | awk '{print $1}') -r 30 -i :0.0 -vcodec libx264 -preset ultrafast -tune zerolatency -crf 18 -pix_fmt yuv420p $file_location
+    else
+        echo "Invalid flag passed, recording with sound"
+        ffmpeg -f alsa -i default -f x11grab -s $(xrandr --current | grep '*' | uniq | awk '{print $1}') -r 30 -i :0.0 -acodec pcm_s16le -vcodec libx264 -preset ultrafast -tune zerolatency -crf 18 -pix_fmt yuv420p $file_location
+    fi
+fi
+

@@ -1,0 +1,14 @@
+powerofff() {
+	selected=$(printf "%s\n" "cancel" "shutdown" "reboot" "sleep" | dmenu)
+	if [ "$selected" =  "shutdown" ]; then
+	        loginctl poweroff || doas poweroff 
+	elif [ "$selected" = "reboot" ]; then
+                loginctl poweroff || doas reboot
+        elif [ "$selected" = "sleep" ]; then
+                doas zzz 
+        elif [ "$selected" = "cancel" ]; then
+ 		return
+        fi
+}
+
+powerofff

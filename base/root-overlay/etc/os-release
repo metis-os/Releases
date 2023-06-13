@@ -1,5 +1,5 @@
-NAME="Metis Linux"
-PRETTY_NAME="Metis Linux"
+NAME="METIS Linux"
+PRETTY_NAME="METIS Linux"
 ID=metis
 BUILD_ID=rolling
 ANSI_COLOR="0;36"

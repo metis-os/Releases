@@ -1,4 +1,4 @@
-for tz in Hong_Kong Jerusalem Kolkata Manila Seoul Shaghai Singapore Taipei Tokyo; do
+for tz in Kathmandu Hong_Kong Jerusalem Kolkata Manila Seoul Shaghai Singapore Taipei Tokyo; do
   menuentry --class=tz.Asia.${tz} "Asia/${tz}" {
     timezone="tz=${1}"
     def_timezone="${1}"

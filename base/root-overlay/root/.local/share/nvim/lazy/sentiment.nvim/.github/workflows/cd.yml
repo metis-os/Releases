@@ -1,0 +1,68 @@
+name: Continuous Deployment
+
+on:
+  push:
+    tags:
+      - v*.*.*
+
+jobs:
+  vimdoc:
+    name: Vimdoc
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout the latest commit
+        uses: actions/checkout@v3
+        with:
+          ref: main
+
+      - name: Ensure `doc` directory exists
+        run: mkdir -p doc
+
+      - name: Generate vimdoc
+        uses: kdheepak/panvimdoc@main
+        with:
+          vimdoc: sentiment
+          description: Enhanced matchparen.vim plugin for Neovim
+          pandoc: README.md
+          demojify: true
+
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          branch: ${{ github.head_ref }}
+          file_pattern: doc/sentiment.txt
+          commit_message: |
+            chore(docs): generate vimdoc
+
+            Convert `README.md` at project root to vimdoc located at
+            `doc/sentiment.txt`.
+
+  release:
+    needs: vimdoc
+    name: Release
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout the latest commit
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Generate changelog
+        id: changelog
+        uses: orhun/git-cliff-action@v2
+        with:
+          args: -vl
+
+      - name: Create new release
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          name: Release ${{ github.ref_name }}
+          body_path: ${{ steps.changelog.outputs.changelog }}

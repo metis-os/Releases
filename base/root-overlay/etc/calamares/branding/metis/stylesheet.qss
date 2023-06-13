@@ -1,0 +1,201 @@
+/*
+ * SPDX-FileCopyrightText: no
+ * SPDX-License-Identifier: CC0-1.0
+ */
+
+/*------------------------ Global Fonts -------------------*/
+*{
+    font: 13px "gnu-free-fonts";
+}
+
+/*------------------------ Bottom Buttons -----------------*/
+
+#debugButton, #aboutButton {
+    border-style: solid;
+    font: bold 12px;
+    padding: 8px;
+}
+
+#view-button-back,
+#view-button-next,
+#view-button-cancel {
+    background-color: #444A58;
+    border: 1px solid #1E2128;
+    border-radius: 2px;
+    font: bold 12px;
+    min-width: 4em;
+    padding: 8px;
+}
+
+#view-button-back:hover,
+#view-button-next:hover,
+#view-button-cancel:hover {
+	color: #FFFFFF;
+    background-color: #505666;
+    border-style: solid;
+}
+
+/*------------------------ Welcome Page Buttons ------------------------*/
+
+#aboutButton { 
+	qproperty-icon: url(/etc/calamares/branding/metis/icons/about.svg);
+}
+
+#debugButton { 
+	qproperty-icon: url(/etc/calamares/branding/metis/icons/about.svg);
+}
+
+#donateButton { 
+	qproperty-icon: url(/etc/calamares/branding/metis/icons/donate.svg);
+}
+
+#supportButton {
+	qproperty-icon: url(/etc/calamares/branding/metis/icons/fourm.svg);
+}
+
+#releaseNotesButton {
+	qproperty-icon: url(/etc/calamares/branding/metis/icons/notes.svg);
+}
+
+#knownIssuesButton {
+	qproperty-icon: url(/etc/calamares/branding/metis/icons/issues.svg);
+}
+
+#debugButton,
+#aboutButton,
+#donateButton,
+#supportButton,
+#releaseNotesButton,
+#knownIssuesButton {
+    font: bold 12px;
+    min-width: 2em;
+    padding: 8px;
+}
+
+#debugButton:hover,
+#aboutButton:hover,
+#donateButton:hover,
+#supportButton:hover,
+#releaseNotesButton:hover,
+#knownIssuesButton:hover {
+	color: #5294E2;
+    border-style: solid;
+    border-width: 0px;
+}
+
+/*------------------------ Welcome Page Text ------------------------*/
+
+/*-- Welcome to installer text --*/
+QLabel#mainText {
+	color: #5294E2;
+    font: bold 12px;
+}
+
+/*-- Language Box --*/
+QComboBox {
+    border: 1px solid #2D303B;
+    border-radius: 2px;
+    padding: 6px;
+    min-width: 20em;
+}
+
+QComboBox:!editable, QComboBox::drop-down:editable {
+     background: #3E4350;
+}
+/* QComboBox gets the "on" state when the popup is open */
+QComboBox:!editable:on, QComboBox::drop-down:editable:on {
+    background: #263E4350;
+}
+
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 30px;
+
+    border-left-width: 1px;
+    border-left-color: #2D303B;
+    border-left-style: solid; /* just a single line */
+    border-top-right-radius: 3px; /* same radius as the QComboBox */
+    border-bottom-right-radius: 3px;
+}
+QComboBox::down-arrow {
+    image: url(/etc/calamares/branding/metis/icons/go-down.svg);
+}
+
+/*------------------------ Main App ------------------------*/
+
+#mainApp { 
+/*	background-color: #29353B;	*/
+}
+
+#sidebarApp {
+}
+
+#logoApp {
+	padding: 0px;
+}
+
+/*------------------------ Tooltip ------------------------*/
+
+QToolTip {
+    border: 1px solid #5294E2;
+    border-radius: 2px;
+    padding: 2px;
+}
+
+/*------------------------ Partition Page ------------------------*/
+
+QLabel#bootInfoIcon {
+	background-color: #EFF0F1;
+    font: bold 12px;
+}
+QLabel#bootInfoLabel {
+	color: #EFF0F1;
+    font: bold 12px;
+}
+QLabel#deviceInfoIcon {
+	background-color: #EFF0F1;
+    font: bold 12px;
+}
+QLabel#deviceInfoLabel {
+	color: #EFF0F1;
+    font: bold 12px;
+}
+
+#bootInfoIcon { 
+}
+#bootInfoLable {
+}
+#deviceInfoIcon {
+}
+#defineInfoLabel {
+}
+#scrollAreaWidgetContents {
+}
+#partitionBarView {
+}
+
+#partitionLabel {
+	color: #EFF0F1;
+}
+
+#partitionLabelsView {
+	color: #EFF0F1;
+}
+
+#CreatePartitionDialog {
+	color: #EFF0F1;
+}
+
+#partResizerWidget {
+	color: #EFF0F1;
+}
+
+/*------------------------ Licensing ------------------------*/
+
+#licenseItem { 
+}
+
+#licenseItemFullText {
+}
+
